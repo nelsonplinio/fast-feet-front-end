@@ -19,3 +19,9 @@ export function signFailure() {
     type: AuthTypes.SIGN_FAILURE,
   };
 }
+
+export function signOut() {
+  return {
+    type: AuthTypes.SIGN_OUT,
+  };
+}

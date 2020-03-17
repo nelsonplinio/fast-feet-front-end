@@ -28,11 +28,15 @@ export function* signIn({ payload }) {
   }
 }
 
-export function getToken({ payload }) {
+export function setToken({ payload }) {
   api.defaults.headers.Authorization = `bearer ${payload.token}`;
 }
 
+export function signOut() {
+  history.push('/');
+}
 export default all([
   takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
-  takeLatest(AuthTypes.SIGN_IN_SUCCESS, getToken),
+  takeLatest(AuthTypes.SIGN_IN_SUCCESS, setToken),
+  takeLatest(AuthTypes.SIGN_OUT, signOut),
 ]);
