@@ -1,5 +1,8 @@
 import React, { useRef, useState } from 'react';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { signInRequest } from '~/store/modules/auth/actions';
 
 import Input from '~/components/Input';
 import { Container, Logo, Form, SubmitButton } from './styles';
@@ -16,9 +19,10 @@ const schema = Yup.object().shape({
 });
 
 export default function SignIn() {
-  const formRef = useRef(null);
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
 
-  const [loading, setLoading] = useState(false);
+  const formRef = useRef(null);
 
   async function handleSubmit(data) {
     try {
@@ -28,7 +32,9 @@ export default function SignIn() {
         abortEarly: false,
       });
 
-      console.log(data);
+      const { email, password } = data;
+
+      dispatch(signInRequest(email, password));
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const validationErros = err.inner.reduce(
