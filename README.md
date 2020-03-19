@@ -4,7 +4,7 @@
 </h1>
 
 <h3 align="center">
-  Fast Feet: 
+  🚚 Fast Feet 📦
 </h3>
 
 <p align="center">
@@ -13,7 +13,7 @@
   <a href="#camera-imagens">Imagens</a>
 </p>
 
-## 🚧👷⚙️ Em Desenvolvimento
+ 🚧👷⚙️ <strong>Em Desenvolvimento</strong>
 
 ## 🚚 Sobre
 
