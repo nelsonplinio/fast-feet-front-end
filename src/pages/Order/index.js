@@ -2,26 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   MdMoreVert,
-  MdSearch,
   MdAdd,
   MdVisibility,
   MdEdit,
   MdDelete,
 } from 'react-icons/md';
-import { DebounceInput } from 'react-debounce-input';
+
 import api from '~/services/api';
+
+import SearchBox from '~/components/SearchBox';
+import ActionButton from '~/components/ActionButton';
+import Table from '~/components/Table';
+
 import {
   Container,
   Toolbar,
-  SearchContainer,
   RegisterButton,
   Scroll,
-  Table,
   Deliveryman,
   StatusChips,
-  ActionButton,
-  Options,
-  Option,
 } from './styles';
 
 export default function Order() {
@@ -96,14 +95,11 @@ export default function Order() {
     <Container>
       <strong>Gerenciando encomendas</strong>
       <Toolbar>
-        <SearchContainer>
-          <MdSearch size={18} color="#999" />
-          <DebounceInput
-            debounceTimeout={300}
-            onChange={e => setSeach(e.target.value)}
-            placeholder="Buscar por encomendas"
-          />
-        </SearchContainer>
+        <SearchBox
+          debounceTimeout={300}
+          placeholder="Buscar por encomendas"
+          onChange={e => setSeach(e.target.value)}
+        />
 
         <RegisterButton>
           <MdAdd size={22} color="#fff" />
@@ -154,23 +150,28 @@ export default function Order() {
                   </StatusChips>
                 </td>
                 <td>
-                  <ActionButton>
+                  <ActionButton.Container>
                     <MdMoreVert size={24} color="#C6C6C6" />
-                    <Options>
-                      <Option>
+
+                    <ActionButton.Options>
+                      <ActionButton.Option>
                         <MdVisibility size={14} color="#8E5BE8" />
                         Visualizar
-                      </Option>
-                      <Option>
+                      </ActionButton.Option>
+
+                      <ActionButton.Option>
                         <MdEdit size={14} color="#4D85EE" />
                         Editar
-                      </Option>
-                      <Option onClick={() => handleDelete(order.id)}>
+                      </ActionButton.Option>
+
+                      <ActionButton.Option
+                        onClick={() => handleDelete(order.id)}
+                      >
                         <MdDelete size={14} color="#DE3B3B" />
                         Excluir
-                      </Option>
-                    </Options>
-                  </ActionButton>
+                      </ActionButton.Option>
+                    </ActionButton.Options>
+                  </ActionButton.Container>
                 </td>
               </tr>
             ))}
