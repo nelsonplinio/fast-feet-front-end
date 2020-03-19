@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
   MdMoreVert,
@@ -23,7 +24,8 @@ import {
   StatusChips,
 } from './styles';
 
-export default function Order() {
+export default function OrderList() {
+  const history = useHistory();
   const [search, setSeach] = useState('');
   const [orders, setOrders] = useState([]);
   useEffect(() => {
@@ -91,6 +93,10 @@ export default function Order() {
     }
   }
 
+  async function handleEdit(id) {
+    history.push(`/order/edit/${id}`);
+  }
+
   return (
     <Container>
       <strong>Gerenciando encomendas</strong>
@@ -101,7 +107,7 @@ export default function Order() {
           onChange={e => setSeach(e.target.value)}
         />
 
-        <RegisterButton>
+        <RegisterButton to="/order/register">
           <MdAdd size={22} color="#fff" />
           CADASTRAR
         </RegisterButton>
@@ -159,7 +165,7 @@ export default function Order() {
                         Visualizar
                       </ActionButton.Option>
 
-                      <ActionButton.Option>
+                      <ActionButton.Option onClick={() => handleEdit(order.id)}>
                         <MdEdit size={14} color="#4D85EE" />
                         Editar
                       </ActionButton.Option>

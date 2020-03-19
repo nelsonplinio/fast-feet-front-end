@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import { darken } from 'polished';
@@ -21,7 +22,7 @@ export const Toolbar = styled.div`
   margin-top: 34px;
 `;
 
-export const RegisterButton = styled.button`
+export const RegisterButton = styled(Link)`
   background: #7d40e7;
   border: none;
   display: flex;

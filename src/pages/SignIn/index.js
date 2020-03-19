@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 
+import getErroMessages from '~/utils/getErroMessages';
 import { signInRequest } from '~/store/modules/auth/actions';
 
 import Input from '~/components/Input';
@@ -37,15 +38,7 @@ export default function SignIn() {
       dispatch(signInRequest(email, password));
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
-        const validationErros = err.inner.reduce(
-          (errors, { path, message }) => ({
-            [path]: message,
-            ...errors,
-          }),
-          {}
-        );
-
-        formRef.current.setErrors(validationErros);
+        formRef.current.setErrors(getErroMessages(err));
       }
     }
   }

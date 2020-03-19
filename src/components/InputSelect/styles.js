@@ -1,9 +1,11 @@
 import styled from 'styled-components';
+import AsyncSelect from 'react-select/async';
 
-export const Container = styled.div`
+export const Container = styled.label`
   display: flex;
   flex-direction: column;
   margin-bottom: 8px;
+  flex: 1;
 `;
 
 export const Label = styled.strong`
@@ -11,11 +13,11 @@ export const Label = styled.strong`
   font-size: 15px;
 `;
 
-export const Input = styled.input`
+export const Input = styled(AsyncSelect)`
   padding: 10px 8px;
   background: #fff;
-  border: 1px solid #dddddd;
   border-radius: 4px;
+  padding-left: 0;
   margin-top: 6px;
   color: #444444;
   font-weight: 500;
