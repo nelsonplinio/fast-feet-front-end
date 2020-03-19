@@ -29,14 +29,20 @@ export function* signIn({ payload }) {
 }
 
 export function setToken({ payload }) {
-  api.defaults.headers.Authorization = `bearer ${payload.token}`;
+  if (!payload) {
+    return;
+  }
+
+  const { token } = payload.auth;
+
+  api.defaults.headers.Authorization = `bearer ${token}`;
 }
 
 export function signOut() {
   history.push('/');
 }
 export default all([
+  takeLatest('persist/REHYDRATE', setToken),
   takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
-  takeLatest(AuthTypes.SIGN_IN_SUCCESS, setToken),
   takeLatest(AuthTypes.SIGN_OUT, signOut),
 ]);

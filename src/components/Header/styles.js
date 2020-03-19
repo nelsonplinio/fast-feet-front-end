@@ -58,7 +58,7 @@ export const Profile = styled.div`
 
   a {
     color: #555;
-    font-size: 16px;
+    font-size: 14px;
     transition: color 0.2s;
     &:hover {
       color: #333;
