@@ -27,7 +27,7 @@ export const Container = styled.button`
 export const Options = styled.div`
   position: absolute;
   top: calc(100% + 8px);
-  left: calc(50% - 110px);
+  left: calc(50% - 90px);
 
   background: #fafafa;
   border-radius: 8px;

@@ -68,6 +68,7 @@ export const Deliveryman = styled.div`
     img {
       height: 100%;
       width: 100%;
+      object-fit: cover;
     }
 
     strong {

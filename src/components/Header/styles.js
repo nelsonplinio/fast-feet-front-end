@@ -42,7 +42,7 @@ export const Nav = styled(NavLink).attrs({
   transition: color 0.2s;
 
   & + & {
-    margin-left: 8px;
+    margin-left: 16px;
   }
 
   &:hover {

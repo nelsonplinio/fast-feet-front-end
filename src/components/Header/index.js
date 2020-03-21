@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ import {
 
 import logo from '~/assets/logo.png';
 
-export default function Header() {
+function Header() {
   const dispatch = useDispatch();
   const profile = useSelector(state => state.user.profile);
 
@@ -43,3 +43,5 @@ export default function Header() {
     </Container>
   );
 }
+
+export default memo(Header);
