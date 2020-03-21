@@ -9,11 +9,13 @@ import {
   MdDelete,
 } from 'react-icons/md';
 
+import { confirmAlert } from 'react-confirm-alert';
 import api from '~/services/api';
 
 import SearchBox from '~/components/SearchBox';
 import ActionButton from '~/components/ActionButton';
 import Table from '~/components/Table';
+import Modal from './Modal';
 
 import {
   Container,
@@ -78,114 +80,144 @@ export default function OrderList() {
     loadOrders();
   }, [search]);
 
-  async function handleDelete(id) {
-    try {
-      await api.delete(`/orders/${id}`);
-      setOrders(orders.filter(order => order.id !== id));
+  function handleDelete(id) {
+    confirmAlert({
+      title: 'Deletar encomenda',
+      message: 'Deseja realmente deletar está encomenda?',
+      buttons: [
+        {
+          label: 'Deletar',
+          onClick: async () => {
+            try {
+              await api.delete(`/orders/${id}`);
+              setOrders(orders.filter(order => order.id !== id));
 
-      toast.success('Encomenda deletada com sucesso!');
-    } catch (err) {
-      if (err.response && err.response.data) {
-        toast.error(err.response.data.error);
-      } else {
-        toast.error('Não foi possivel realizar está ação!');
-      }
-    }
+              toast.success('Encomenda deletada com sucesso!');
+            } catch (err) {
+              if (err.response && err.response.data) {
+                toast.error(err.response.data.error);
+              } else {
+                toast.error('Não foi possivel realizar está ação!');
+              }
+            }
+          },
+        },
+        {
+          label: 'Não',
+        },
+      ],
+    });
   }
 
   async function handleEdit(id) {
     history.push(`/order/edit/${id}`);
   }
 
+  function handleShowOrder(order) {
+    confirmAlert({
+      customUI: () => <Modal order={order} />,
+    });
+  }
+
   return (
-    <Container>
-      <strong>Gerenciando encomendas</strong>
-      <Toolbar>
-        <SearchBox
-          debounceTimeout={300}
-          placeholder="Buscar por encomendas"
-          onChange={e => setSeach(e.target.value)}
-        />
+    <>
+      <Container>
+        <strong>Gerenciando encomendas</strong>
+        <Toolbar>
+          <SearchBox
+            debounceTimeout={300}
+            placeholder="Buscar por encomendas"
+            onChange={e => setSeach(e.target.value)}
+          />
 
-        <RegisterButton to="/order/register">
-          <MdAdd size={22} color="#fff" />
-          CADASTRAR
-        </RegisterButton>
-      </Toolbar>
-      <Scroll>
-        <Table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Encomenda</th>
-              <th>Destinatario</th>
-              <th>Entregador</th>
-              <th>Cidade</th>
-              <th>Estado</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map(order => (
-              <tr key={`${order.id}`}>
-                <td>#{order.id}</td>
-                <td>{order.product}</td>
-                <td>{order.recipient.name}</td>
-                <td>
-                  <Deliveryman status={order.status}>
-                    <div>
-                      {order.deliveryman.avatar ? (
-                        <img
-                          src={order.deliveryman.avatar.url}
-                          alt={order.deliveryman.name}
-                        />
-                      ) : (
-                        <strong>{order.deliveryman.letters}</strong>
-                      )}
-                    </div>
-
-                    {order.deliveryman.name}
-                  </Deliveryman>
-                </td>
-                <td>{order.recipient.city}</td>
-                <td>{order.recipient.state}</td>
-                <td>
-                  <StatusChips status={order.status}>
-                    {order.statusLabel}
-                  </StatusChips>
-                </td>
-                <td>
-                  <ActionButton.Container>
-                    <MdMoreVert size={24} color="#C6C6C6" />
-
-                    <ActionButton.Options>
-                      <ActionButton.Option>
-                        <MdVisibility size={14} color="#8E5BE8" />
-                        Visualizar
-                      </ActionButton.Option>
-
-                      <ActionButton.Option onClick={() => handleEdit(order.id)}>
-                        <MdEdit size={14} color="#4D85EE" />
-                        Editar
-                      </ActionButton.Option>
-
-                      <ActionButton.Option
-                        onClick={() => handleDelete(order.id)}
-                      >
-                        <MdDelete size={14} color="#DE3B3B" />
-                        Excluir
-                      </ActionButton.Option>
-                    </ActionButton.Options>
-                  </ActionButton.Container>
-                </td>
+          <RegisterButton to="/order/register">
+            <MdAdd size={22} color="#fff" />
+            CADASTRAR
+          </RegisterButton>
+        </Toolbar>
+        <Scroll>
+          <Table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Encomenda</th>
+                <th>Destinatario</th>
+                <th>Entregador</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Status</th>
+                <th>Ações</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Scroll>
+            </thead>
+            <tbody>
+              {orders.map(order => (
+                <tr key={`${order.id}`}>
+                  <td>#{order.id}</td>
+                  <td>{order.product}</td>
+                  <td>{order.recipient.name}</td>
+                  <td>
+                    <Deliveryman status={order.status}>
+                      <div>
+                        {order.deliveryman.avatar ? (
+                          <img
+                            src={order.deliveryman.avatar.url}
+                            alt={order.deliveryman.name}
+                          />
+                        ) : (
+                          <strong>{order.deliveryman.letters}</strong>
+                        )}
+                      </div>
 
-      <div styles={{ height: 100 }} />
-    </Container>
+                      {order.deliveryman.name}
+                    </Deliveryman>
+                  </td>
+                  <td>{order.recipient.city}</td>
+                  <td>{order.recipient.state}</td>
+                  <td>
+                    <StatusChips status={order.status}>
+                      {order.statusLabel}
+                    </StatusChips>
+                  </td>
+                  <td>
+                    <ActionButton.Container>
+                      <MdMoreVert size={24} color="#C6C6C6" />
+
+                      <ActionButton.Options>
+                        <ActionButton.Option
+                          onClick={() => handleShowOrder(order)}
+                        >
+                          <MdVisibility size={14} color="#8E5BE8" />
+                          Visualizar
+                        </ActionButton.Option>
+
+                        {order.status === 'pending' && (
+                          <>
+                            <ActionButton.Option
+                              onClick={() => handleEdit(order.id)}
+                            >
+                              <MdEdit size={14} color="#4D85EE" />
+                              Editar
+                            </ActionButton.Option>
+
+                            <ActionButton.Option
+                              onClick={() => handleDelete(order.id)}
+                            >
+                              <MdDelete size={14} color="#DE3B3B" />
+                              Excluir
+                            </ActionButton.Option>
+                          </>
+                        )}
+                      </ActionButton.Options>
+                    </ActionButton.Container>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Scroll>
+
+        <div styles={{ height: 100 }} />
+      </Container>
+    </>
   );
 }

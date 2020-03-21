@@ -52,7 +52,9 @@ export const Options = styled.div`
   }
 `;
 
-export const Option = styled.button`
+export const Option = styled.button.attrs({
+  type: 'button',
+})`
   display: flex;
   align-items: center;
   width: 100%;

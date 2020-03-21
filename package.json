@@ -21,6 +21,7 @@
     "polished": "^3.4.4",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
+    "react-confirm-alert": "^2.6.1",
     "react-debounce-input": "^3.2.2",
     "react-dom": "^16.13.0",
     "react-icons": "^3.9.0",
