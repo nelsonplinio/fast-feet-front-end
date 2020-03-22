@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { useField } from '@unform/core';
 import PropTypes from 'prop-types';
+import { Container, Label, Input, InputMask, Error } from './styles';
 
-import { Container, Label, Input, Error } from './styles';
-
-export default function InputWrapper({ name, label, ...rest }) {
+export default function InputWrapper({ name, label, mask, ...rest }) {
   const inputRef = useRef(null);
   const { fieldName, defaultValue = '', registerField, error } = useField(name);
   useEffect(() => {
@@ -17,7 +16,17 @@ export default function InputWrapper({ name, label, ...rest }) {
   return (
     <Container>
       {label && <Label>{label}</Label>}
-      <Input ref={inputRef} defaultValue={defaultValue} {...rest} />
+      {mask ? (
+        <InputMask
+          ref={inputRef}
+          defaultValue={defaultValue}
+          mask={mask}
+          {...rest}
+        />
+      ) : (
+        <Input ref={inputRef} defaultValue={defaultValue} {...rest} />
+      )}
+
       <Error hasError={!!error}>{error}</Error>
     </Container>
   );
@@ -26,8 +35,10 @@ export default function InputWrapper({ name, label, ...rest }) {
 InputWrapper.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
+  mask: PropTypes.string,
 };
 
 InputWrapper.defaultProps = {
   label: null,
+  mask: null,
 };

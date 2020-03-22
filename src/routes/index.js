@@ -11,9 +11,11 @@ import Order from '~/pages/OrderList/Order';
 import DeliverymanList from '~/pages/DeliverymanList';
 import Deliveryman from '~/pages/DeliverymanList/Deliveryman';
 
+import RecipientList from '~/pages/RecipientList';
+import Recipient from '~/pages/RecipientList/Recipient';
+
 import Profile from '~/pages/Profile';
 import Problem from '~/pages/Problem';
-import Recipient from '~/pages/Recipient';
 
 export default function Routes() {
   return (
@@ -26,7 +28,15 @@ export default function Routes() {
 
       <Route path="/profile" component={Profile} isPrivate />
       <Route path="/problem" component={Problem} isPrivate />
-      <Route path="/recipient" component={Recipient} isPrivate />
+
+      <Route path="/recipient" exact component={RecipientList} isPrivate />
+      <Route path="/recipient/register" exact component={Recipient} isPrivate />
+      <Route
+        path="/recipient/edit/:recipient_id"
+        exact
+        component={Recipient}
+        isPrivate
+      />
 
       <Route path="/deliveryman" exact component={DeliverymanList} isPrivate />
       <Route path="/deliveryman/register" component={Deliveryman} isPrivate />
