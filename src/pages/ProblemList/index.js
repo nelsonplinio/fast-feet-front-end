@@ -14,15 +14,24 @@ import { Container, Description } from './styles';
 export default function ProblemList() {
   const [problems, setProblems] = useState([]);
 
+  const [page, setPage] = useState(1);
+  const [pageEnded, setPageEnded] = useState(true);
+
   useEffect(() => {
     async function loadRecipients() {
-      const response = await api.get('/problems');
+      const response = await api.get('/problems', {
+        params: {
+          page,
+        },
+      });
 
-      setProblems(response.data);
+      const { list, totalPage } = response.data;
+      setProblems(list);
+      setPageEnded(page === totalPage);
     }
 
     loadRecipients();
-  }, []);
+  }, [page]);
 
   function handleVisible(problem) {
     confirmAlert({
@@ -59,55 +68,64 @@ export default function ProblemList() {
     });
   }
 
+  function handleNextPage() {
+    setPage(page + 1);
+  }
+
+  function handlePrevPage() {
+    setPage(page - 1);
+  }
+
   return (
-    <>
-      <Container>
-        <strong>Gerenciandor de problemas</strong>
+    <Container>
+      <strong>Gerenciandor de problemas</strong>
 
-        <Table>
-          <thead>
-            <tr>
-              <th>Encomenda</th>
-              <th style={{ flex: 1 }}>Problema</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {problems.map(problem => (
-              <tr key={`${problem.id}`}>
-                <td>#{problem.delivery_id}</td>
+      <Table
+        page={page}
+        hasNextPage={!pageEnded}
+        onPrevPage={handlePrevPage}
+        onNextPage={handleNextPage}
+      >
+        <thead>
+          <tr>
+            <th>Encomenda</th>
+            <th style={{ flex: 1 }}>Problema</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {problems.map(problem => (
+            <tr key={`${problem.id}`}>
+              <td>#{problem.delivery_id}</td>
 
-                <td>
-                  <Description>{problem.description}</Description>
-                </td>
-                <td>
-                  <ActionButton.Container>
-                    <MdMoreVert size={24} color="#C6C6C6" />
+              <td>
+                <Description>{problem.description}</Description>
+              </td>
+              <td>
+                <ActionButton.Container>
+                  <MdMoreVert size={24} color="#C6C6C6" />
 
-                    <ActionButton.Options>
+                  <ActionButton.Options>
+                    <ActionButton.Option onClick={() => handleVisible(problem)}>
+                      <MdVisibility size={14} color="#4D85EE" />
+                      Visualizar
+                    </ActionButton.Option>
+
+                    {!problem.delivery.canceled_at && (
                       <ActionButton.Option
-                        onClick={() => handleVisible(problem)}
+                        onClick={() => handleCancel(problem.id)}
                       >
-                        <MdVisibility size={14} color="#4D85EE" />
-                        Visualizar
+                        <MdDelete size={14} color="#DE3B3B" />
+                        Cancelar
                       </ActionButton.Option>
-
-                      {!problem.delivery.canceled_at && (
-                        <ActionButton.Option
-                          onClick={() => handleCancel(problem.id)}
-                        >
-                          <MdDelete size={14} color="#DE3B3B" />
-                          Cancelar
-                        </ActionButton.Option>
-                      )}
-                    </ActionButton.Options>
-                  </ActionButton.Container>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Container>
-    </>
+                    )}
+                  </ActionButton.Options>
+                </ActionButton.Container>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Container>
   );
 }

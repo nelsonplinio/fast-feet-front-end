@@ -1,49 +1,45 @@
-import styled from 'styled-components';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { Container, Table, PageContainer, PageButton } from './styles';
 
-export default styled.table`
-  margin-top: 28px;
-  width: 100%;
-  margin-bottom: auto;
-  flex: 1;
-  border-spacing: 0 18px;
+export default function TableWrapper({
+  children,
+  page,
+  hasNextPage,
+  onNextPage,
+  onPrevPage,
+}) {
+  return (
+    <Container>
+      <Table>{children}</Table>
 
-  thead {
-    color: #444;
-    padding: 22px 0;
-    margin-bottom: 32px;
-    th {
-      padding: 12px;
-      text-align: left;
-    }
+      <PageContainer>
+        <PageButton type="button" disabled={page === 1} onClick={onPrevPage}>
+          <MdChevronLeft size={24} />
+        </PageButton>
 
-    & td:last-child {
-      width: 22px;
-    }
-  }
+        <strong>{page}</strong>
 
-  tbody {
-    tr {
-      border: none;
-      background: #fff;
+        <PageButton type="button" disabled={!hasNextPage} onClick={onNextPage}>
+          <MdChevronRight size={24} />
+        </PageButton>
+      </PageContainer>
+    </Container>
+  );
+}
 
-      & td:first-child {
-        border-top-left-radius: 6px;
-        border-bottom-left-radius: 6px;
-      }
+TableWrapper.propTypes = {
+  page: PropTypes.number,
+  children: PropTypes.element.isRequired,
+  onNextPage: PropTypes.func,
+  onPrevPage: PropTypes.func,
+  hasNextPage: PropTypes.bool,
+};
 
-      & td:last-child {
-        border-top-right-radius: 6px;
-        border-bottom-right-radius: 6px;
-        width: 22px;
-      }
-
-      td {
-        position: relative;
-        color: #666;
-        font-size: 16px;
-        padding: 22px 12px;
-        border-spacing: 0 !important;
-      }
-    }
-  }
-`;
+TableWrapper.defaultProps = {
+  page: 1,
+  onNextPage: () => {},
+  onPrevPage: () => {},
+  hasNextPage: false,
+};

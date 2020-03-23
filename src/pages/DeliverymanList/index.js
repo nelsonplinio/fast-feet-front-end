@@ -12,19 +12,24 @@ import Table from '~/components/Table';
 import { Container, Toolbar, RegisterButton, Deliveryman } from './styles';
 
 export default function DeliverymanList() {
-  const [search, setSeach] = useState('');
+  const [search, setSearch] = useState('');
   const [deliverymans, setDeliverymans] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [pageEnded, setPageEnded] = useState(true);
 
   useEffect(() => {
     async function loadDeliverymans() {
       const response = await api.get('/deliverymans', {
         params: {
           q: search,
+          page,
         },
       });
 
+      const { list, totalPage } = response.data;
       setDeliverymans(
-        response.data.map(deliveryman => {
+        list.map(deliveryman => {
           const [firstName = '', secondName = ''] = deliveryman.name.split(' ');
 
           return {
@@ -33,10 +38,11 @@ export default function DeliverymanList() {
           };
         })
       );
+      setPageEnded(page === totalPage);
     }
 
     loadDeliverymans();
-  }, [search]);
+  }, [search, page]);
 
   function handleDelete(id) {
     confirmAlert({
@@ -69,76 +75,92 @@ export default function DeliverymanList() {
     });
   }
 
+  function handleNextPage() {
+    setPage(page + 1);
+  }
+
+  function handlePrevPage() {
+    setPage(page - 1);
+  }
+
+  function handleSearch(e) {
+    setPage(1);
+    setSearch(e.target.value);
+  }
+
   return (
-    <>
-      <Container>
-        <strong>Gerenciando entregadores</strong>
-        <Toolbar>
-          <SearchBox
-            debounceTimeout={300}
-            placeholder="Buscar por entregadores"
-            onChange={e => setSeach(e.target.value)}
-          />
+    <Container>
+      <strong>Gerenciando entregadores</strong>
+      <Toolbar>
+        <SearchBox
+          debounceTimeout={300}
+          placeholder="Buscar por entregadores"
+          onChange={handleSearch}
+        />
 
-          <RegisterButton to="/deliveryman/register">
-            <MdAdd size={22} color="#fff" />
-            CADASTRAR
-          </RegisterButton>
-        </Toolbar>
+        <RegisterButton to="/deliveryman/register">
+          <MdAdd size={22} color="#fff" />
+          CADASTRAR
+        </RegisterButton>
+      </Toolbar>
 
-        <Table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Entregador</th>
-              <th>E-mail</th>
-              <th>Ações</th>
+      <Table
+        page={page}
+        hasNextPage={!pageEnded}
+        onPrevPage={handlePrevPage}
+        onNextPage={handleNextPage}
+      >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Entregador</th>
+            <th>E-mail</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {deliverymans.map(deliveryman => (
+            <tr key={`${deliveryman.id}`}>
+              <td>#{deliveryman.id}</td>
+
+              <td>
+                <Deliveryman to={`/deliveryman/edit/${deliveryman.id}`}>
+                  <div>
+                    {deliveryman.avatar ? (
+                      <img
+                        src={deliveryman.avatar.url}
+                        alt={deliveryman.name}
+                      />
+                    ) : (
+                      <strong>{deliveryman.letters}</strong>
+                    )}
+                  </div>
+
+                  {deliveryman.name}
+                </Deliveryman>
+              </td>
+              <td>{deliveryman.email}</td>
+
+              <td>
+                <ActionButton.Container>
+                  <MdMoreVert size={24} color="#C6C6C6" />
+
+                  <ActionButton.Options>
+                    <ActionButton.Option
+                      onClick={() => handleDelete(deliveryman.id)}
+                    >
+                      <MdDelete size={14} color="#DE3B3B" />
+                      Excluir
+                    </ActionButton.Option>
+                  </ActionButton.Options>
+                </ActionButton.Container>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {deliverymans.map(deliveryman => (
-              <tr key={`${deliveryman.id}`}>
-                <td>#{deliveryman.id}</td>
+          ))}
+        </tbody>
+      </Table>
 
-                <td>
-                  <Deliveryman to={`/deliveryman/edit/${deliveryman.id}`}>
-                    <div>
-                      {deliveryman.avatar ? (
-                        <img
-                          src={deliveryman.avatar.url}
-                          alt={deliveryman.name}
-                        />
-                      ) : (
-                        <strong>{deliveryman.letters}</strong>
-                      )}
-                    </div>
-
-                    {deliveryman.name}
-                  </Deliveryman>
-                </td>
-                <td>{deliveryman.email}</td>
-
-                <td>
-                  <ActionButton.Container>
-                    <MdMoreVert size={24} color="#C6C6C6" />
-
-                    <ActionButton.Options>
-                      <ActionButton.Option
-                        onClick={() => handleDelete(deliveryman.id)}
-                      >
-                        <MdDelete size={14} color="#DE3B3B" />
-                        Excluir
-                      </ActionButton.Option>
-                    </ActionButton.Options>
-                  </ActionButton.Container>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-
-        <div styles={{ height: 100 }} />
-      </Container>
-    </>
+      <div styles={{ height: 100 }} />
+    </Container>
   );
 }

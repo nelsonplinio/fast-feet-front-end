@@ -12,8 +12,11 @@ import Table from '~/components/Table';
 import { Container, Toolbar, RegisterButton, Name } from './styles';
 
 export default function RecipientList() {
-  const [search, setSeach] = useState('');
+  const [search, setSearch] = useState('');
   const [recipients, setRecipients] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [pageEnded, setPageEnded] = useState(true);
 
   useEffect(() => {
     async function loadRecipients() {
@@ -22,12 +25,14 @@ export default function RecipientList() {
           q: search,
         },
       });
+      const { list, totalPage } = response.data;
 
-      setRecipients(response.data);
+      setRecipients(list);
+      setPageEnded(page === totalPage);
     }
 
     loadRecipients();
-  }, [search]);
+  }, [search, page]);
 
   function handleDelete(id) {
     confirmAlert({
@@ -60,6 +65,19 @@ export default function RecipientList() {
     });
   }
 
+  function handleNextPage() {
+    setPage(page + 1);
+  }
+
+  function handlePrevPage() {
+    setPage(page - 1);
+  }
+
+  function handleSearch(e) {
+    setPage(1);
+    setSearch(e.target.value);
+  }
+
   return (
     <>
       <Container>
@@ -68,7 +86,7 @@ export default function RecipientList() {
           <SearchBox
             debounceTimeout={300}
             placeholder="Buscar por destinatário"
-            onChange={e => setSeach(e.target.value)}
+            onChange={handleSearch}
           />
 
           <RegisterButton to="/recipient/register">
@@ -77,7 +95,12 @@ export default function RecipientList() {
           </RegisterButton>
         </Toolbar>
 
-        <Table>
+        <Table
+          page={page}
+          hasNextPage={!pageEnded}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
+        >
           <thead>
             <tr>
               <th>ID</th>
