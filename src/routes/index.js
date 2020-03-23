@@ -15,7 +15,7 @@ import RecipientList from '~/pages/RecipientList';
 import Recipient from '~/pages/RecipientList/Recipient';
 
 import Profile from '~/pages/Profile';
-import Problem from '~/pages/Problem';
+import ProblemList from '~/pages/ProblemList';
 
 export default function Routes() {
   return (
@@ -27,7 +27,7 @@ export default function Routes() {
       <Route path="/order/edit/:order_id" component={Order} isPrivate />
 
       <Route path="/profile" component={Profile} isPrivate />
-      <Route path="/problem" component={Problem} isPrivate />
+      <Route path="/problem" component={ProblemList} isPrivate />
 
       <Route path="/recipient" exact component={RecipientList} isPrivate />
       <Route path="/recipient/register" exact component={Recipient} isPrivate />

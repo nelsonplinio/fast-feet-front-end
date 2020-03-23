@@ -38,6 +38,7 @@ export default styled.table`
       }
 
       td {
+        position: relative;
         color: #666;
         font-size: 16px;
         padding: 22px 12px;

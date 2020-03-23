@@ -5,7 +5,11 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export default createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap');
-
+  
+  .react-confirm-alert-overlay {
+    background: rgba(0,0,0, 0.4);
+  }
+  
   * {
     margin: 0;
     padding: 0;
