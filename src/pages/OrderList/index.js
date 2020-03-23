@@ -24,6 +24,8 @@ import {
   Scroll,
   Deliveryman,
   StatusChips,
+  StatusContainer,
+  Status,
 } from './styles';
 
 export default function OrderList() {
@@ -33,6 +35,7 @@ export default function OrderList() {
   const [orders, setOrders] = useState([]);
 
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState('');
   const [pageEnded, setPageEnded] = useState(true);
 
   useEffect(() => {
@@ -41,6 +44,7 @@ export default function OrderList() {
         params: {
           q: search,
           page,
+          status,
         },
       });
 
@@ -86,7 +90,7 @@ export default function OrderList() {
       setPageEnded(page === totalPage);
     }
     loadOrders();
-  }, [search, page]);
+  }, [search, page, status]);
 
   function handleDelete(id) {
     confirmAlert({
@@ -155,6 +159,35 @@ export default function OrderList() {
           CADASTRAR
         </RegisterButton>
       </Toolbar>
+      <StatusContainer>
+        <Status checked={status === ''} onClick={() => setStatus('')}>
+          TODOS
+        </Status>
+        <Status
+          checked={status === 'pending'}
+          onClick={() => setStatus('pending')}
+        >
+          PENDENTES
+        </Status>
+        <Status
+          checked={status === 'canceled'}
+          onClick={() => setStatus('canceled')}
+        >
+          CANCELADOS
+        </Status>
+        <Status
+          checked={status === 'withdrawn'}
+          onClick={() => setStatus('withdrawn')}
+        >
+          RETIRADOS
+        </Status>
+        <Status
+          checked={status === 'delivered'}
+          onClick={() => setStatus('delivered')}
+        >
+          ENTREGUES
+        </Status>
+      </StatusContainer>
       <Scroll>
         <Table
           page={page}

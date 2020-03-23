@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-import { darken } from 'polished';
+import { darken, lighten } from 'polished';
 
 export const Container = styled.div`
   display: flex;
@@ -156,5 +156,34 @@ export const StatusChips = styled.div`
           return darken(0.3, '#F0F0DF');
       }
     }};
+  }
+`;
+
+export const StatusContainer = styled.div`
+  margin: 8px auto;
+  display: flex;
+`;
+
+export const Status = styled.button.attrs({
+  type: 'button',
+})`
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: bold;
+  transition: background 0.2s;
+  background: ${({ checked }) =>
+    checked ? '#7d40e7' : lighten(0.3, '#7d40e7')};
+
+  &:hover {
+    background: ${({ checked }) =>
+      checked ? darken(0.1, '#7d40e7') : lighten(0.2, '#7d40e7')};
+  }
+
+  & + & {
+    margin-left: 8px;
   }
 `;
