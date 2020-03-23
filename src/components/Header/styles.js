@@ -10,6 +10,8 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 16px 22px;
+  position: sticky;
+  top: 0;
 `;
 
 export const MenuWrapper = styled.div`
