@@ -13,8 +13,6 @@
   <a href="#camera-imagens">Imagens</a>
 </p>
 
- 🚧👷⚙️ <strong>Em Desenvolvimento</strong>
-
 ## 🚚 Sobre
 
  Fast Feet é sistema que auxilia no gerenciamento das entregas de mercadorias.
@@ -34,5 +32,23 @@
 
 ## 📷 Imagens
 
+<strong>SignIn</strong>
+<img src='img/login.png'>
+<br />
+<strong>Listagem de encomendas</strong>
 <img src='img/orders.png'>
+<br />
+<strong>Detalhes da encomenda.</strong>
+<img src='img/order_detail.png'>
 
+## 🚀 Instalar e usar
+
+###### Clone o respostiorio. 
+``git clone git@github.com:nelsonplinio/fast-feet-front-end.git``
+
+###### Instalar as dependencias. 
+``cd fast-feet-front-end ``
+`` yarn ou npm install``
+
+###### Instalar as dependencias. 
+``yarn start ou npm run start ``
