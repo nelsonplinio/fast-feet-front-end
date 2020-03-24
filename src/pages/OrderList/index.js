@@ -144,6 +144,11 @@ export default function OrderList() {
     setSearch(e.target.value);
   }
 
+  function handleSetStatus(status) {
+    setPage(1);
+    setStatus(status);
+  }
+
   return (
     <Container>
       <strong>Gerenciando encomendas</strong>
@@ -160,30 +165,30 @@ export default function OrderList() {
         </RegisterButton>
       </Toolbar>
       <StatusContainer>
-        <Status checked={status === ''} onClick={() => setStatus('')}>
+        <Status checked={status === ''} onClick={() => handleSetStatus('')}>
           TODOS
         </Status>
         <Status
           checked={status === 'pending'}
-          onClick={() => setStatus('pending')}
+          onClick={() => handleSetStatus('pending')}
         >
           PENDENTES
         </Status>
         <Status
           checked={status === 'canceled'}
-          onClick={() => setStatus('canceled')}
+          onClick={() => handleSetStatus('canceled')}
         >
           CANCELADOS
         </Status>
         <Status
           checked={status === 'withdrawn'}
-          onClick={() => setStatus('withdrawn')}
+          onClick={() => handleSetStatus('withdrawn')}
         >
           RETIRADOS
         </Status>
         <Status
           checked={status === 'delivered'}
-          onClick={() => setStatus('delivered')}
+          onClick={() => handleSetStatus('delivered')}
         >
           ENTREGUES
         </Status>

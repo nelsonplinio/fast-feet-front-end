@@ -65,7 +65,7 @@ export default function Order() {
       });
 
       callback(
-        response.data.map(({ id, name }) => ({
+        response.data.list.map(({ id, name }) => ({
           value: id,
           label: name,
         }))
@@ -84,7 +84,7 @@ export default function Order() {
       });
 
       callback(
-        response.data.map(({ id, name }) => ({
+        response.data.list.map(({ id, name }) => ({
           value: id,
           label: name,
         }))

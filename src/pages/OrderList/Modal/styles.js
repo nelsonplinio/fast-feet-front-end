@@ -31,7 +31,7 @@ export const Label = styled.strong`
 
 export const Signature = styled.img`
   width: 100%;
-  height: 200px;
+  height: 155px;
   margin-top: 16px;
   border-radius: 8px;
 `;
