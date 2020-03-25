@@ -23,13 +23,17 @@
 ## ⚙️ Oque foi utilizado
 <ul>
   <li>UnForm</li>
+  <li>React</li>
   <li>React hooks</li>
   <li>Redux</li>
   <li>Redux Persist</li>
   <li>Redux Saga</li>
   <li>Select</li>
-  <li>React Select</li>
   <li>Axios</li>
+  <li>date-fns</li>
+  <li>immer</li>
+  <li>polished</li>
+  <li>yup</li>
 </ul>
 
 ## 📷 Imagens
