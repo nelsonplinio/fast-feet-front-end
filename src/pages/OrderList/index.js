@@ -127,7 +127,7 @@ export default function OrderList() {
 
   function handleShowOrder(order) {
     confirmAlert({
-      customUI: () => <Modal order={order} />,
+      customUI: () => <Modal data={order} />,
     });
   }
 
@@ -144,9 +144,9 @@ export default function OrderList() {
     setSearch(e.target.value);
   }
 
-  function handleSetStatus(status) {
+  function handleSetStatus(newStatus) {
     setPage(1);
-    setStatus(status);
+    setStatus(newStatus);
   }
 
   return (

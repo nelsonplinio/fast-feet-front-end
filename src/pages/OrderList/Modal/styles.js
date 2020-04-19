@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { darken } from 'polished';
 
 export const Container = styled.div`
   background: #fafafa;
@@ -7,6 +8,11 @@ export const Container = styled.div`
   display: flex;
   width: 500px;
   flex-direction: column;
+`;
+
+export const Product = styled.strong`
+  font-size: 32px;
+  margin-bottom: 16px;
 `;
 
 export const Section = styled.div`
@@ -34,4 +40,18 @@ export const Signature = styled.img`
   height: 155px;
   margin-top: 16px;
   border-radius: 8px;
+`;
+
+export const WithdrawalButton = styled.button`
+  border: 0;
+  border-radius: 8px;
+  height: 55px;
+  background: #7159c1;
+  color: #fff;
+  font-weight: bold;
+
+  transition: background 0.2s;
+  &:hover {
+    background: ${darken(0.1, '#7159c1')};
+  }
 `;

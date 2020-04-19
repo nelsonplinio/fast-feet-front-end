@@ -1,9 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { parseISO, format } from 'date-fns';
-import { Container, Section, Label, Signature } from './styles';
+import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
+import {
+  Container,
+  Section,
+  Label,
+  Signature,
+  Product,
+  WithdrawalButton,
+} from './styles';
 
-export default function Modal({ order }) {
+import api from '~/services/api';
+
+export default function Modal({ data }) {
+  const [loading, setLoading] = useState(false);
+  const [order, setOrder] = useState(data);
+
   const orderFormatted = useMemo(
     () => ({
       ...order,
@@ -16,8 +30,33 @@ export default function Modal({ order }) {
     }),
     [order]
   );
+
+  async function handleWithdrawal() {
+    const isConfirm = window.confirm(
+      'Deseja confirmar a retirada da encomenda?'
+    );
+    if (!isConfirm) {
+      return;
+    }
+    const { deliveryman_id, id: delivery_id } = order;
+    try {
+      setLoading(true);
+      const response = await api.post(
+        `/deliveryman/${deliveryman_id}/deliveries/${delivery_id}/withdrawal`
+      );
+      toast.success('Encomenda retirada com sucesso!!!');
+      setOrder({ ...data, ...response.data });
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.error);
+      }
+    }
+    setLoading(false);
+  }
+
   return (
     <Container>
+      <Product>{order.product}</Product>
       <Section>
         <Label>Informações da encomenda</Label>
         <span>
@@ -46,22 +85,26 @@ export default function Modal({ order }) {
           {orderFormatted.canceled_at && orderFormatted.canceled_at}
         </span>
       </Section>
-      {/* <Section>
-        <Label>Informações da encomenda</Label>
-        <span>Rua beethoven, 1529</span>
-        <span>Diadema - SP</span>
-        <span>00002123-22</span>
-      </Section> */}
       <Section>
         <strong>Assinatura do destinatario</strong>
         {order.signature && <Signature src={order.signature.url} />}
       </Section>
+
+      {order.status === 'pending' && (
+        <WithdrawalButton onClick={handleWithdrawal}>
+          {loading ? 'Confirmando ...' : 'Confirmar Retirada'}
+        </WithdrawalButton>
+      )}
     </Container>
   );
 }
 
 Modal.propTypes = {
-  order: PropTypes.shape({
+  data: PropTypes.shape({
+    id: PropTypes.number,
+    status: PropTypes.string,
+    deliveryman_id: PropTypes.number,
+    product: PropTypes.string,
     canceled_at: PropTypes.string,
     start_date: PropTypes.string,
     end_date: PropTypes.string,
